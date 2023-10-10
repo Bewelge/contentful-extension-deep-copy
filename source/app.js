@@ -42,8 +42,8 @@ window.doTheDeepCopy = async function() {
   const sys = entry.getSys()
   const clonedEntry = await recursiveClone(space, sys.id, tag)
   addToLog('')
-  addToLog('<strong>Clone successful!<strong>')
-  addToLog('New entry at:')
+  addToLog('<strong>Duplizierung erfolgreich!<strong>')
+  addToLog('Neues Element:')
   addToLog(`<a target="_top" href="https://app.contentful.com/spaces/${sys.space.sys.id}/entries/${clonedEntry.sys.id}">https://app.contentful.com/spaces/${sys.space.sys.id}/entries/${sys.id}</a>`)
 
   activationButton.classList.remove('cf-is-loading')

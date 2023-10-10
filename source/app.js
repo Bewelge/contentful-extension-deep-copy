@@ -1,56 +1,58 @@
-import { init as initContentfulExtension } from 'contentful-ui-extensions-sdk'
-import { recursiveClone } from './deep-copy2'
+import { init as initContentfulExtension } from "contentful-ui-extensions-sdk";
+import { recursiveClone } from "./deep-copy2";
 
-let space = null
-let entry = null
-let extension = null
-let state = 'idle'
+let space = null;
+let entry = null;
+let extension = null;
+let state = "idle";
 
-const activationButton = document.querySelector('button')
-const logWindow = document.querySelector('.log-window')
+const activationButton = document.querySelector("button");
+const logWindow = document.querySelector(".log-window");
 
-initContentfulExtension(getExtension => {
-  space = getExtension.space
-  entry = getExtension.entry
-  extension = getExtension
+initContentfulExtension((getExtension) => {
+  space = getExtension.space;
+  entry = getExtension.entry;
+  extension = getExtension;
 
-  if (extension.window.updateHeight) extension.window.updateHeight()
-})
+  if (extension.window.updateHeight) extension.window.updateHeight();
+});
 
-
-function addToLog (str) {
-  logWindow.innerHTML += `<p>${str}</p>`
-  logWindow.scrollTo(0, 999999999)
+function addToLog(str) {
+  logWindow.innerHTML += `<p>${str}</p>`;
+  logWindow.scrollTo(0, 999999999);
 }
-window.addEventListener('deepcopylog', (event) => {
-  addToLog(event.detail.log)
-})
+window.addEventListener("deepcopylog", (event) => {
+  addToLog(event.detail.log);
+});
 
-window.doTheDeepCopy = async function() {
-  if (state != 'idle') return
+window.doTheDeepCopy = async function () {
+  if (state != "idle") return;
 
-  state = 'cloning'
+  state = "cloning";
 
-  activationButton.classList.add('cf-is-loading')
-  activationButton.disabled = true
-  logWindow.style.display = 'block'
+  activationButton.classList.add("cf-is-loading");
+  activationButton.disabled = true;
+  logWindow.style.display = "block";
 
-  const tag = document.querySelector('.clone-tag').value
+  const tag = document.querySelector(".clone-tag").value;
 
-  if (extension.window.updateHeight) extension.window.updateHeight()
+  if (extension.window.updateHeight) extension.window.updateHeight();
+  console.log("updating height", extension);
 
-  const sys = entry.getSys()
-  const clonedEntry = await recursiveClone(space, sys.id, tag)
-  addToLog('')
-  addToLog('<strong>Duplizierung erfolgreich!<strong>')
-  addToLog('Neues Element:')
-  addToLog(`<a target="_top" href="https://app.contentful.com/spaces/${sys.space.sys.id}/entries/${clonedEntry.sys.id}">https://app.contentful.com/spaces/${sys.space.sys.id}/entries/${sys.id}</a>`)
+  const sys = entry.getSys();
+  const clonedEntry = await recursiveClone(space, sys.id, tag);
+  addToLog("");
+  addToLog("<strong>Duplizierung erfolgreich!<strong>");
+  addToLog("Neues Element:");
+  addToLog(
+    `<a target="_top" href="https://app.contentful.com/spaces/${sys.space.sys.id}/entries/${clonedEntry.sys.id}">https://app.contentful.com/spaces/${sys.space.sys.id}/entries/${sys.id}</a>`
+  );
 
-  activationButton.classList.remove('cf-is-loading')
-}
+  activationButton.classList.remove("cf-is-loading");
+};
 
-document.querySelector('.clone-tag').value = `(${new Date().toUTCString()})`
+document.querySelector(".clone-tag").value = `(${new Date().toUTCString()})`;
 
 window.toggleConfirmModal = function (flag) {
-  document.querySelector('.confirm').style.display = flag ? 'flex' : 'none'
-}
+  document.querySelector(".confirm").style.display = flag ? "flex" : "none";
+};

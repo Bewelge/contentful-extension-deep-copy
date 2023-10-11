@@ -73,7 +73,7 @@ async function createNewEntriesFromReferences (space, tag) {
 
   for (let entryId in references) {
     const entry = references[entryId]
-    if (entry.fields.title && entry.fields.title['de-DE']) entry.fields.title['de-DE'] = entry.fields.title['de-DE'] + ' ' + tag
+    if (entry.fields.internal && entry.fields.internal['de-DE']) entry.fields.internal['de-DE'] = entry.fields.internal['de-DE'] + ' ' + tag
     const newEntry = await createEntry(space, entry.sys.contentType.sys.id, { fields: entry.fields })
     await publishEntry(newEntry)
     newReferenceCount++

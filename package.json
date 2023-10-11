@@ -2,10 +2,10 @@
   "name": "deep-copy",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "source/app.js",
   "scripts": {
     "dev": "parcel source/index.html",
-    "build": "parcel build source/index.html --public-url ."
+    "build": "rm -rf dist/ && PARCEL_WORKERS=0 parcel build source/index.html --public-url . --log-level verbose"
   },
   "keywords": [],
   "author": "",
@@ -14,12 +14,14 @@
     "@babel/runtime": "^7.3.4",
     "contentful-management": "^5.7.0",
     "contentful-ui-extensions-sdk": "^3.7.0",
+    "parcel": "^2.9.3",
     "react": "^16.8.4",
     "react-dom": "^16.8.4"
   },
   "devDependencies": {
     "@babel/core": "^7.3.4",
     "@babel/plugin-transform-runtime": "^7.3.4",
-    "cssnano": "^4.1.10"
+    "cssnano": "^6.0.1",
+    "process": "^0.11.10"
   }
 }

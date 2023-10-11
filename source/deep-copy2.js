@@ -24,6 +24,11 @@ async function createEntry (space, type, data) {
   return await space.createEntry(type, data)
 }
 
+async function publishEntry (entry) {
+  await wait(waitTime)
+  return await entry.publish()
+}
+
 async function getEntry (space, entryId) {
   await wait(waitTime)
   return await space.getEntry(entryId)
@@ -70,6 +75,7 @@ async function createNewEntriesFromReferences (space, tag) {
     const entry = references[entryId]
     if (entry.fields.title && entry.fields.title['de-DE']) entry.fields.title['de-DE'] = entry.fields.title['de-DE'] + ' ' + tag
     const newEntry = await createEntry(space, entry.sys.contentType.sys.id, { fields: entry.fields })
+    await publishEntry(newEntry)
     newReferenceCount++
     newEntries[entryId] = newEntry
   }

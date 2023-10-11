@@ -4131,6 +4131,10 @@ async function createEntry(space, type, data) {
     await wait(waitTime);
     return await space.createEntry(type, data);
 }
+async function publishEntry(entry) {
+    await wait(waitTime);
+    return await entry.publish();
+}
 async function getEntry(space, entryId) {
     await wait(waitTime);
     return await space.getEntry(entryId);
@@ -4162,6 +4166,7 @@ async function createNewEntriesFromReferences(space, tag) {
         const newEntry = await createEntry(space, entry.sys.contentType.sys.id, {
             fields: entry.fields
         });
+        await publishEntry(newEntry);
         newReferenceCount++;
         newEntries[entryId] = newEntry;
     }

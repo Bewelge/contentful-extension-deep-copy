@@ -21,14 +21,17 @@ async function updateEntry(space, entry) {
 
 async function createEntry(space, type, data) {
   await wait(waitTime);
-  log(data)
+  log(data);
   return await space.createEntry(type, data);
 }
 
 async function publishEntry(space, entry) {
-  await wait(waitTime);
-  log(entry)
-  space.publishEntry(entry);
+  try {
+    space.publishEntry(entry);
+  } catch (e) {
+    log("error publishing entry:");
+    log(e);
+  }
 }
 
 async function getEntry(space, entryId) {
@@ -88,7 +91,7 @@ async function createNewEntriesFromReferences(space, tag) {
     const newEntry = await createEntry(space, entry.sys.contentType.sys.id, {
       fields: entry.fields,
     });
-    log("Attempting publish")
+    log("Attempting publish");
     publishEntry(space, newEntry);
     newReferenceCount++;
     newEntries[entryId] = newEntry;

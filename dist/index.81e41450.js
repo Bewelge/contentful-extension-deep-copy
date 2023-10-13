@@ -4134,9 +4134,12 @@ async function createEntry(space, type, data) {
     return await space.createEntry(type, data);
 }
 async function publishEntry(space, entry) {
-    await wait(waitTime);
-    (0, _log.log)(entry);
-    space.publishEntry(entry);
+    try {
+        space.publishEntry(entry);
+    } catch (e) {
+        (0, _log.log)("error publishing entry:");
+        (0, _log.log)(e);
+    }
 }
 async function getEntry(space, entryId) {
     await wait(waitTime);

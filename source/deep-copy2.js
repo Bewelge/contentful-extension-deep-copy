@@ -88,7 +88,7 @@ async function createNewEntriesFromReferences(space, tag) {
     const entry = references[entryId];
     if (entry.fields.internal && entry.fields.internal["de-DE"]) {
       let name = entry.fields.internal["de-DE"];
-      if (tag != "" && oldName.includes(tag)) {
+      if (tag != "" && name.includes(tag)) {
         name = name.replace(placeholder, tag);
       } else {
         name += " " + tag;

@@ -2964,7 +2964,7 @@ window.doTheDeepCopy = async function() {
     activationButton.disabled = true;
     logWindow.style.display = "block";
     const tag = document.querySelector(".clone-tag").value;
-    const placeholder = document.querySelector(".clone-tag").value;
+    const placeholder = document.querySelector(".clone-placeholder").value;
     if (extension.window.updateHeight) extension.window.updateHeight();
     console.log("updating height", extension);
     const sys = entry.getSys();
@@ -4177,6 +4177,7 @@ async function createNewEntriesFromReferences(space, tag, placeholder) {
                 (0, _log.log)(`replacing placeholder tag "${placeholder}" with tag "${tag}".`);
                 name = name.replace(placeholder, tag);
             } else name += " " + tag;
+            (0, _log.log)(`Creating entry "${entry.fields.internal["de-DE"]}" as "${name}"`);
             entry.fields.internal["de-DE"] = name;
         }
         const newEntry = await createEntry(space, entry.sys.contentType.sys.id, {

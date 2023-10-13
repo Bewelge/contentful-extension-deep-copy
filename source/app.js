@@ -35,7 +35,7 @@ window.doTheDeepCopy = async function () {
   logWindow.style.display = "block";
 
   const tag = document.querySelector(".clone-tag").value;
-  const placeholder = document.querySelector(".clone-tag").value;
+  const placeholder = document.querySelector(".clone-placeholder").value;
 
   if (extension.window.updateHeight) extension.window.updateHeight();
   console.log("updating height", extension);

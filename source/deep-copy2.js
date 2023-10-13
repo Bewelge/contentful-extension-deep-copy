@@ -95,6 +95,7 @@ async function createNewEntriesFromReferences(space, tag, placeholder) {
       } else {
         name += " " + tag;
       }
+      log(`Creating entry "${entry.fields.internal["de-DE"]}" as "${name}"`);
       entry.fields.internal["de-DE"] = name;
     }
     const newEntry = await createEntry(space, entry.sys.contentType.sys.id, {

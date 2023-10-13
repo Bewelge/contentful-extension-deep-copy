@@ -4170,7 +4170,7 @@ async function createNewEntriesFromReferences(space, tag) {
             fields: entry.fields
         });
         (0, _log.log)("Attempting publish");
-        await publishEntry(space, newEntry);
+        publishEntry(space, newEntry);
         newReferenceCount++;
         newEntries[entryId] = newEntry;
     }

@@ -89,7 +89,7 @@ async function createNewEntriesFromReferences(space, tag) {
       fields: entry.fields,
     });
     log("Attempting publish")
-    await publishEntry(space, newEntry);
+    publishEntry(space, newEntry);
     newReferenceCount++;
     newEntries[entryId] = newEntry;
   }

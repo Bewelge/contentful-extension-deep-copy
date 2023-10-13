@@ -86,9 +86,15 @@ async function createNewEntriesFromReferences(space, tag) {
 
   for (let entryId in references) {
     const entry = references[entryId];
-    if (entry.fields.internal && entry.fields.internal["de-DE"])
-      entry.fields.internal["de-DE"] =
-        entry.fields.internal["de-DE"] + " " + tag;
+    if (entry.fields.internal && entry.fields.internal["de-DE"]) {
+      let name = entry.fields.internal["de-DE"];
+      if (tag != "" && oldName.includes(tag)) {
+        name = name.replace(placeholder, tag);
+      } else {
+        name += " " + tag;
+      }
+      entry.fields.internal["de-DE"] = name;
+    }
     const newEntry = await createEntry(space, entry.sys.contentType.sys.id, {
       fields: entry.fields,
     });
@@ -141,7 +147,7 @@ async function updateReferenceTree(space, newReferences) {
   }
 }
 
-async function recursiveClone(space, entryId, tag) {
+async function recursiveClone(space, entryId, tag, placeholder) {
   references = {};
   referenceCount = 0;
   newReferenceCount = 0;
@@ -172,7 +178,11 @@ async function recursiveClone(space, entryId, tag) {
     );
   }, statusUpdateTimeout);
 
-  const newReferences = await createNewEntriesFromReferences(space, tag);
+  const newReferences = await createNewEntriesFromReferences(
+    space,
+    tag,
+    placeholder
+  );
   clearInterval(statusUpdateTimer);
   log(` -- Created ${newReferenceCount} reference(s)`);
 

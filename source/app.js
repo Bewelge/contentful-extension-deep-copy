@@ -35,12 +35,13 @@ window.doTheDeepCopy = async function () {
   logWindow.style.display = "block";
 
   const tag = document.querySelector(".clone-tag").value;
+  const placeholder = document.querySelector(".clone-tag").value;
 
   if (extension.window.updateHeight) extension.window.updateHeight();
   console.log("updating height", extension);
 
   const sys = entry.getSys();
-  const clonedEntry = await recursiveClone(space, sys.id, tag);
+  const clonedEntry = await recursiveClone(space, sys.id, tag, placeholder);
   addToLog("");
   addToLog("<strong>Duplizierung erfolgreich!<strong>");
   addToLog("Neues Element:");

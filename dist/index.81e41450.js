@@ -4167,14 +4167,16 @@ async function findReferences(space, entryId) {
         }
     }
 }
-async function createNewEntriesFromReferences(space, tag) {
+async function createNewEntriesFromReferences(space, tag, placeholder) {
     const newEntries = {};
     for(let entryId in references){
         const entry = references[entryId];
         if (entry.fields.internal && entry.fields.internal["de-DE"]) {
             let name = entry.fields.internal["de-DE"];
-            if (tag != "" && name.includes(tag)) name = name.replace(placeholder, tag);
-            else name += " " + tag;
+            if (placeholder != "" && name.includes(placeholder)) {
+                (0, _log.log)(`replacing placeholder tag "${placeholder}" with tag "${tag}".`);
+                name = name.replace(placeholder, tag);
+            } else name += " " + tag;
             entry.fields.internal["de-DE"] = name;
         }
         const newEntry = await createEntry(space, entry.sys.contentType.sys.id, {
@@ -4217,7 +4219,7 @@ async function updateReferenceTree(space, newReferences) {
         updatedReferenceCount++;
     }
 }
-async function recursiveClone(space, entryId, tag, placeholder1) {
+async function recursiveClone(space, entryId, tag, placeholder) {
     references = {};
     referenceCount = 0;
     newReferenceCount = 0;
@@ -4238,7 +4240,7 @@ async function recursiveClone(space, entryId, tag, placeholder1) {
     statusUpdateTimer = setInterval(()=>{
         (0, _log.log)(` - created ${newReferenceCount}/${referenceCount} - ${Math.round(newReferenceCount / referenceCount * 100)}%`);
     }, statusUpdateTimeout);
-    const newReferences = await createNewEntriesFromReferences(space, tag, placeholder1);
+    const newReferences = await createNewEntriesFromReferences(space, tag, placeholder);
     clearInterval(statusUpdateTimer);
     (0, _log.log)(` -- Created ${newReferenceCount} reference(s)`);
     (0, _log.log)("");

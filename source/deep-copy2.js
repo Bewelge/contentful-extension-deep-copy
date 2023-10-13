@@ -82,14 +82,15 @@ async function findReferences(space, entryId) {
   }
 }
 
-async function createNewEntriesFromReferences(space, tag) {
+async function createNewEntriesFromReferences(space, tag, placeholder) {
   const newEntries = {};
 
   for (let entryId in references) {
     const entry = references[entryId];
     if (entry.fields.internal && entry.fields.internal["de-DE"]) {
       let name = entry.fields.internal["de-DE"];
-      if (tag != "" && name.includes(tag)) {
+      if (placeholder != "" && name.includes(placeholder)) {
+        log(`replacing placeholder tag "${placeholder}" with tag "${tag}".`);
         name = name.replace(placeholder, tag);
       } else {
         name += " " + tag;

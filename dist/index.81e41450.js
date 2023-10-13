@@ -4130,15 +4130,16 @@ async function updateEntry(space, entry) {
 }
 async function createEntry(space, type, data) {
     await wait(waitTime);
-    (0, _log.log)(data);
     return await space.createEntry(type, data);
 }
 async function publishEntry(space, entry) {
+    await wait(waitTime);
     try {
         space.publishEntry(entry);
+        return await wait(waitTime);
     } catch (e) {
-        (0, _log.log)("error publishing entry:");
-        (0, _log.log)(e);
+        (0, _log.log)("error publishing entry: " + e);
+        return await wait(waitTime);
     }
 }
 async function getEntry(space, entryId) {
@@ -4173,7 +4174,7 @@ async function createNewEntriesFromReferences(space, tag) {
             fields: entry.fields
         });
         (0, _log.log)("Attempting publish");
-        publishEntry(space, newEntry);
+        await publishEntry(space, newEntry);
         newReferenceCount++;
         newEntries[entryId] = newEntry;
     }

@@ -4130,11 +4130,13 @@ async function updateEntry(space, entry) {
 }
 async function createEntry(space, type, data) {
     await wait(waitTime);
+    (0, _log.log)(data);
     return await space.createEntry(type, data);
 }
 async function publishEntry(space, entry) {
     await wait(waitTime);
-    return await space.publishEntry(entry);
+    (0, _log.log)(entry);
+    space.publishEntry(entry);
 }
 async function getEntry(space, entryId) {
     await wait(waitTime);

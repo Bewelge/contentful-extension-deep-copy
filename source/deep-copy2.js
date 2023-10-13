@@ -4,6 +4,7 @@ let references = {};
 let referenceCount = 0;
 let newReferenceCount = 0;
 let updatedReferenceCount = 0;
+let publishedCount = 0;
 
 const statusUpdateTimeout = 3000;
 const waitTime = 100;
@@ -98,8 +99,7 @@ async function createNewEntriesFromReferences(space, tag) {
     const newEntry = await createEntry(space, entry.sys.contentType.sys.id, {
       fields: entry.fields,
     });
-    log("Attempting publish");
-    await publishEntry(space, newEntry);
+
     newReferenceCount++;
     newEntries[entryId] = newEntry;
   }
@@ -128,6 +128,16 @@ async function updateReferencesOnField(field, newReferences) {
   }
 }
 
+async function publishEntries(space, newReferences) {
+  for (let entryId in newReferences) {
+    const entry = newReferences[entryId];
+
+    await publishEntry(space, entry);
+
+    // await updateEntry(space, entry);
+    publishedCount++;
+  }
+}
 async function updateReferenceTree(space, newReferences) {
   for (let entryId in newReferences) {
     const entry = newReferences[entryId];
@@ -152,6 +162,7 @@ async function recursiveClone(space, entryId, tag, placeholder) {
   referenceCount = 0;
   newReferenceCount = 0;
   updatedReferenceCount = 0;
+  publishedCount = 0;
   log(`Starting clone...`);
 
   let statusUpdateTimer = null;
@@ -196,6 +207,18 @@ async function recursiveClone(space, entryId, tag, placeholder) {
     );
   }, statusUpdateTimeout);
   await updateReferenceTree(space, newReferences);
+  clearInterval(statusUpdateTimer);
+
+  log("");
+  log(`Publishing entries...`);
+  statusUpdateTimer = setInterval(() => {
+    log(
+      ` - published ${publishedCount}/${referenceCount} - ${Math.round(
+        (publishedCount / referenceCount) * 100
+      )}%`
+    );
+  }, statusUpdateTimeout);
+  await publishEntries(space, newReferences);
   clearInterval(statusUpdateTimer);
 
   log("");
